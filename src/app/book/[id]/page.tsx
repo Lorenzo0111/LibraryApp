@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 
-export async function getBook(id: string) {
+async function getBook(id: string) {
   return await prisma.book.findUnique({
     where: {
       id,
