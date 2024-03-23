@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id              String @id @unique
+  username        String @unique
+  hashed_password String
+
+  sessions    Session[]
+  bookedBooks Book[]
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Book {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  imageUrl    String
+  bookedBy    User?   @relation(fields: [bookedById], references: [id], onDelete: SetNull)
+  bookedById  String?
+}
