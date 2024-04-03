@@ -1,19 +1,28 @@
 "use client";
 
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import type { KeyedMutator } from "swr";
 
-export default function CheckoutButton({ id }: { id: string }) {
-  const router = useRouter();
-
+export default function CheckoutButton({
+  id,
+  mutate,
+  setLoading,
+}: {
+  id: string;
+  setLoading: (loading: boolean) => void;
+  mutate: KeyedMutator<any>;
+}) {
   return (
     <button
       onClick={() => {
+        setLoading(true);
         axios.post(`/api/books/${id}/checkout`).then(() => {
-          router.refresh();
+          mutate().then(() => {
+            setLoading(false);
+          });
         });
       }}
-      className="button block w-full mt-2 text-center"
+      className="btn btn-primary block w-full mt-2 text-center"
     >
       Checkout
     </button>

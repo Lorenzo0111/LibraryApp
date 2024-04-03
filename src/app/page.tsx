@@ -1,25 +1,31 @@
-import { getUser } from "@/components/auth";
+"use client";
+
 import BookCard from "@/components/book";
-import prisma from "@/lib/prisma";
+import { useFetcher } from "@/utils/fetcher";
+import type { Book } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
-async function getBooks() {
-  const books = await prisma.book.findMany();
-  return books;
-}
+export default function Home() {
+  const { data: books, isLoading, error } = useFetcher<Book[]>("/api/books");
 
-export default async function Home() {
-  const user = await getUser();
-
-  if (!user) {
-    return redirect("/login");
-  }
-
-  const books = await getBooks();
+  useEffect(() => {
+    if (error?.response?.status === 401) {
+      redirect("/login");
+    }
+  }, [error]);
 
   return (
-    <main className="flex min-h-screen gap-8 flex-wrap p-12">
-      {books.map((book) => (
+    <main className="flex h-full gap-8 flex-wrap p-12">
+      {isLoading && (
+        <span className="m-auto loading loading-spinner loading-lg"></span>
+      )}
+      {error && (
+        <div className="alert alert-error" role="alert">
+          {error.message}
+        </div>
+      )}
+      {books?.map((book) => (
         <BookCard {...book} key={book.id} />
       ))}
     </main>

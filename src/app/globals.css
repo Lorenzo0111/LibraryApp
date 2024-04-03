@@ -3,19 +3,11 @@
 @tailwind utilities;
 
 @layer components {
-  .card {
-    @apply bg-[#2A2F30] p-4 rounded-lg shadow-md;
-  }
-
   .bg-gradient {
     @apply bg-gradient-to-r from-primary to-secondary;
-  }
-
-  .button {
-    @apply bg-gradient bg-[#2A2F30] text-white px-8 py-2 rounded-md;
   }
 }
 
 body {
-  @apply bg-[#1A1F20] text-white flex flex-col min-h-screen;
+  @apply flex flex-col min-h-screen;
 }

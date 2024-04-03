@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function BookCard(book: Book) {
   return (
-    <div className="card h-fit">
+    <div className="card p-4 bg-neutral h-fit">
       <Image
         src={book.imageUrl}
         alt={book.name}
@@ -16,7 +16,7 @@ export default function BookCard(book: Book) {
 
       <Link
         href={"/book/" + book.id}
-        className="button block w-full mt-2 text-center"
+        className="btn btn-primary w-full mt-2 text-center"
       >
         {!book.bookedById ? "Check out" : "Unavailable"}
       </Link>

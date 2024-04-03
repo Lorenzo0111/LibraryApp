@@ -1,49 +1,15 @@
-import { getUser } from "@/components/auth";
-import prisma from "@/lib/prisma";
-import { redirect } from "next/navigation";
+"use client";
 
-export default async function Page({
+export default function Page({
   searchParams: { error },
 }: {
   searchParams: { error?: string };
 }) {
-  const user = await getUser();
-  if (!user) redirect("/login");
-
   return (
-    <div className="card w-1/3 m-auto flex flex-col gap-2">
+    <div className="card w-1/4 m-auto flex flex-col gap-2">
       <h1 className="text-4xl font-extrabold">Create a book</h1>
       {error && <p className="text-red-500">{error}</p>}
-      <form
-        action={async (form) => {
-          "use server";
-
-          const name = form.get("name") as string;
-          const description = form.get("description") as string;
-          const image = form.get("image") as string;
-
-          if (!name || !description || !image) {
-            redirect("/create?error=Please fill out all fields");
-            return;
-          }
-
-          if (name.length > 128) {
-            redirect("/create?error=Title too long");
-            return;
-          }
-
-          await prisma.book.create({
-            data: {
-              name,
-              description,
-              imageUrl: image,
-            },
-          });
-
-          redirect("/");
-        }}
-        className="flex flex-col gap-2"
-      >
+      <form method="POST" action="/api/books" className="flex flex-col gap-2">
         <input
           className="bg-[#1A1F20] rounded-lg p-2"
           required
@@ -67,7 +33,7 @@ export default async function Page({
           placeholder="Image URL"
           type="url"
         />
-        <button className="button" type="submit">
+        <button className="btn btn-primary" type="submit">
           Create
         </button>
       </form>

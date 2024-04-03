@@ -1,35 +1,39 @@
-import { getUser } from "@/components/auth";
+"use client";
+
 import CheckoutButton from "@/components/buttons/checkout";
 import DeleteButton from "@/components/buttons/delete";
-import prisma from "@/lib/prisma";
+import { useFetcher } from "@/utils/fetcher";
+import { Book } from "@prisma/client";
 import Image from "next/image";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
 
-async function getBook(id: string) {
-  return await prisma.book.findUnique({
-    where: {
-      id,
-    },
-    include: {
+export default function Page({ params: { id } }: { params: { id: string } }) {
+  const {
+    data: book,
+    isLoading,
+    error,
+    mutate,
+  } = useFetcher<
+    Book & {
       bookedBy: {
-        select: {
-          username: true,
-        },
-      },
-    },
-  });
-}
+        username: string;
+      } | null;
+    }
+  >(`/api/books/${encodeURIComponent(id)}`);
+  const [loading, setLoading] = useState(true);
 
-export default async function Page({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
-  const user = await getUser();
-  if (!user) redirect("/login");
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
 
-  const book = await getBook(id);
-  if (!book) return notFound();
+  if (loading) {
+    return <span className="m-auto loading loading-spinner loading-lg"></span>;
+  }
+
+  if (error || !book) {
+    return notFound();
+  }
 
   return (
     <div className="flex gap-4 p-12">
@@ -48,8 +52,10 @@ export default async function Page({
           {book.bookedBy ? "Booked by " + book.bookedBy.username : "Available"}
         </p>
         <div className="flex gap-2">
-          {!book.bookedBy && <CheckoutButton id={id} />}
-          <DeleteButton id={id} />
+          {!book.bookedBy && (
+            <CheckoutButton id={id} mutate={mutate} setLoading={setLoading} />
+          )}
+          <DeleteButton id={id} setLoading={setLoading} />
         </div>
       </div>
     </div>

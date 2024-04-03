@@ -48,7 +48,7 @@ export default async function Page({
             Already have an account? <span className="text-primary">Login</span>
           </Link>
         </div>
-        <button className="button" type="submit">
+        <button className="btn btn-primary" type="submit">
           Register
         </button>
       </form>

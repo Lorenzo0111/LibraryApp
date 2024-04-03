@@ -41,7 +41,7 @@ export default async function Page({
             <span className="text-primary">Register</span>
           </Link>
         </div>
-        <button className="button" type="submit">
+        <button className="btn btn-primary" type="submit">
           Login
         </button>
       </form>
