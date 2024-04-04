@@ -1,6 +1,12 @@
 import Link from "next/link";
+import { getUser } from "./auth";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const user = await getUser();
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
