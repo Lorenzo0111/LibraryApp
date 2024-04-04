@@ -59,7 +59,7 @@ export default async function Navbar() {
         <Link href="/create" className="btn btn-primary">
           Add book
         </Link>
-        <Link href="/logout" className="btn">
+        <Link href="/logout" className="btn" prefetch={false}>
           Logout
         </Link>
       </div>
