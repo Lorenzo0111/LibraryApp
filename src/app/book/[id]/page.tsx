@@ -36,7 +36,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
   }
 
   return (
-    <div className="flex gap-4 p-12">
+    <div className="flex flex-col md:flex-row gap-4 p-12">
       <Image
         src={book.imageUrl}
         alt={book.name}
@@ -51,7 +51,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
           Status:{" "}
           {book.bookedBy ? "Booked by " + book.bookedBy.username : "Available"}
         </p>
-        <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
           {!book.bookedBy && (
             <CheckoutButton id={id} mutate={mutate} setLoading={setLoading} />
           )}

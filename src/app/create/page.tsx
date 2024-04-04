@@ -6,7 +6,7 @@ export default function Page({
   searchParams: { error?: string };
 }) {
   return (
-    <div className="card w-1/4 m-auto flex flex-col gap-2">
+    <div className="card w-2/3 xl:w-1/4 m-auto flex flex-col gap-2">
       <h1 className="text-4xl font-extrabold">Create a book</h1>
       {error && <p className="text-red-500">{error}</p>}
       <form method="POST" action="/api/books" className="flex flex-col gap-2">
